@@ -5,6 +5,7 @@ Reverse-engineered internal API. See CLAUDE.md for full documentation.
 """
 
 import json
+import os
 import re
 import urllib.parse
 from dataclasses import dataclass
@@ -365,7 +366,7 @@ class ConsumerNotebookLMClient:
         params = {
             "rpcids": rpc_id,
             "source-path": source_path,
-            "bl": "boq_labs-tailwind-frontend_20251221.14_p0",  # Version string, may change
+            "bl": os.environ.get("NOTEBOOKLM_BL", "boq_labs-tailwind-frontend_20251221.14_p0"),
             "hl": "en",
             "rt": "c",
         }
@@ -1128,7 +1129,7 @@ class ConsumerNotebookLMClient:
 
         self._reqid_counter += 100000  # Increment counter
         url_params = {
-            "bl": "boq_labs-tailwind-frontend_20251221.14_p0",
+            "bl": os.environ.get("NOTEBOOKLM_BL", "boq_labs-tailwind-frontend_20251221.14_p0"),
             "hl": "en",
             "_reqid": str(self._reqid_counter),
             "rt": "c",
