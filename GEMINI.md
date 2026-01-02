@@ -19,12 +19,16 @@ The project uses `uv` for dependency management and tool installation.
 
 ### Installation
 
+**From PyPI (Recommended):**
 ```bash
-# Clone the repository
+uv tool install notebooklm-mcp-server
+# or: pip install notebooklm-mcp-server
+```
+
+**From Source (Development):**
+```bash
 git clone https://github.com/YOUR_USERNAME/notebooklm-mcp.git
 cd notebooklm-mcp
-
-# Install as a tool (makes executables available)
 uv tool install .
 ```
 

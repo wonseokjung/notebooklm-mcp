@@ -50,6 +50,26 @@ Use at your own risk for personal/experimental purposes.
 
 ## Installation
 
+Install from PyPI using your preferred Python package manager:
+
+### Using uv (Recommended)
+```bash
+uv tool install notebooklm-mcp-server
+```
+
+### Using pip
+```bash
+pip install notebooklm-mcp-server
+```
+
+### Using pipx
+```bash
+pipx install notebooklm-mcp-server
+```
+
+<details>
+<summary>Alternative: Install from Source</summary>
+
 ```bash
 # Clone the repository
 git clone https://github.com/jacob-bd/notebooklm-mcp.git
@@ -58,19 +78,19 @@ cd notebooklm-mcp
 # Install with uv
 uv tool install .
 ```
+</details>
 
 ## Upgrading
 
-To update to the latest version:
-
 ```bash
-cd notebooklm-mcp
+# Using uv
+uv tool upgrade notebooklm-mcp-server
 
-# Pull latest changes
-git pull
+# Using pip
+pip install --upgrade notebooklm-mcp-server
 
-# Clean cache and reinstall (IMPORTANT: cache clean prevents stale code)
-uv cache clean && uv tool install --force .
+# Using pipx
+pipx upgrade notebooklm-mcp-server
 ```
 
 After upgrading, restart your AI tool to reconnect to the updated MCP server:
@@ -148,37 +168,38 @@ Restart Claude Code after editing.
 
 For IDEs that use JSON configuration files for MCP servers:
 
-**Step 1:** Find where the MCP binary is installed:
-
-```bash
-# On macOS/Linux:
-which notebooklm-mcp
-
-# On Windows:
-where notebooklm-mcp
-
-# Example output: /Users/yourname/.local/bin/notebooklm-mcp
-```
-
-**Step 2:** Add to your IDE's MCP config file using the full path from Step 1:
-
 | IDE | Config File Location |
 |-----|---------------------|
 | Cursor | `~/.cursor/mcp.json` |
 | VS Code | `~/.vscode/mcp.json` |
 
+**Option A: Using uvx (no pre-install needed)**
 ```json
 {
   "mcpServers": {
     "notebooklm-mcp": {
-      "command": "/Users/yourname/.local/bin/notebooklm-mcp",
+      "command": "uvx",
+      "args": ["notebooklm-mcp-server"]
+    }
+  }
+}
+```
+
+**Option B: Using installed binary**
+
+First install: `uv tool install notebooklm-mcp-server` (or pip/pipx), then:
+```json
+{
+  "mcpServers": {
+    "notebooklm-mcp": {
+      "command": "notebooklm-mcp",
       "args": []
     }
   }
 }
 ```
 
-**Step 3:** Restart your IDE.
+Restart your IDE after adding the configuration.
 
 ### Gemini CLI (Recommended CLI Method)
 
@@ -204,28 +225,27 @@ gemini mcp list
 <details>
 <summary>Alternative: Manual JSON Configuration</summary>
 
-**Step 1:** Find where the MCP binary is installed:
+Add to `~/.gemini/settings.json` under `mcpServers`:
 
-```bash
-# On macOS/Linux:
-which notebooklm-mcp
-
-# On Windows:
-where notebooklm-mcp
-
-# Example output: /Users/yourname/.local/bin/notebooklm-mcp
-```
-
-**Step 2:** Add to `~/.gemini/settings.json` under `mcpServers` using the full path from Step 1:
-
+**Option A: Using uvx (no pre-install needed)**
 ```json
 "notebooklm-mcp": {
-  "command": "/Users/yourname/.local/bin/notebooklm-mcp",
+  "command": "uvx",
+  "args": ["notebooklm-mcp-server"]
+}
+```
+
+**Option B: Using installed binary**
+
+First install: `uv tool install notebooklm-mcp-server` (or pip/pipx), then:
+```json
+"notebooklm-mcp": {
+  "command": "notebooklm-mcp",
   "args": []
 }
 ```
 
-**Step 3:** Restart Gemini CLI.
+Restart Gemini CLI after editing.
 </details>
 
 ### Managing Context Window Usage
