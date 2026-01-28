@@ -1,479 +1,214 @@
-# NotebookLM MCP Server
+# Connect AI LAB 제이 AI 멘토: 1인 기업 수익화 정석
+
+<img src="docs/media/jay_profile.jpg" width="300" alt="Jay Profile" />
 
 ![NotebookLM MCP Header](docs/media/header.jpeg)
 
-An MCP server for **NotebookLM** (notebooklm.google.com).
+**[유튜브 채널 바로가기](https://www.youtube.com/@CONNECT-AI-LAB)** | **[공식 홈페이지](https://www.aicitybuilders.com/)**
 
-> **Note:** Tested with Pro/free tier accounts. May work with NotebookLM Enterprise accounts but has not been tested.
+### 🚀 AI 1인 기업가를 위한 자동화 툴
 
-📺 **Watch the Demos**
+**NotebookLM**(notebooklm.google.com)을 위한 맥락 프로토콜(MCP) 서버인 **Connect AI LAB 제이 AI 멘토**를 소개합니다.
 
-| **General Overview** | **Claude Desktop** | **Perplexity Desktop** | **MCP Super Assistant** |
+> **⚠️ 경고:** 이 프로젝트의 콘텐츠 및 코드를 무단으로 복제하거나 상업적으로 재배포하는 것을 금지합니다.
+>
+> 📧 **문의:** jay@connexionai.kr
+
+> **참고:** Pro 및 무료 계정에서 테스트되었습니다. Enterprise 계정에서도 작동할 수 있지만 테스트되지는 않았습니다.
+
+📺 **데모 영상 보기**
+
+| 일반 개요 | Claude Desktop | Perplexity Desktop | MCP 슈퍼 어시스턴트 |
 |:---:|:---:|:---:|:---:|
 | [![General](https://img.youtube.com/vi/d-PZDQlO4m4/mqdefault.jpg)](https://www.youtube.com/watch?v=d-PZDQlO4m4) | [![Claude](https://img.youtube.com/vi/PU8JhgLPxes/mqdefault.jpg)](https://www.youtube.com/watch?v=PU8JhgLPxes) | [![Perplexity](https://img.youtube.com/vi/BCKlDNg-qxs/mqdefault.jpg)](https://www.youtube.com/watch?v=BCKlDNg-qxs) | [![MCP SuperAssistant](https://img.youtube.com/vi/7aHDbkr-l_E/mqdefault.jpg)](https://www.youtube.com/watch?v=7aHDbkr-l_E) |
 
 
-## Features
+## 주요 기능
 
-| Tool | Description |
+| 도구 | 설명 |
 |------|-------------|
-| `notebook_list` | List all notebooks |
-| `notebook_create` | Create a new notebook |
-| `notebook_get` | Get notebook details with sources |
-| `notebook_describe` | Get AI-generated summary of notebook content |
-| `source_describe` | Get AI-generated summary and keywords for a source |
-| `source_get_content` | Get raw text content from a source (no AI processing) |
-| `notebook_rename` | Rename a notebook |
-| `chat_configure` | Configure chat goal/style and response length |
-| `notebook_delete` | Delete a notebook (requires confirmation) |
-| `notebook_add_url` | Add URL/YouTube as source |
-| `notebook_add_text` | Add pasted text as source |
-| `notebook_add_drive` | Add Google Drive document as source |
-| `notebook_query` | Ask questions and get AI answers |
-| `source_list_drive` | List sources with freshness status |
-| `source_sync_drive` | Sync stale Drive sources (requires confirmation) |
-| `source_delete` | Delete a source from notebook (requires confirmation) |
-| `research_start` | Start Web or Drive research to discover sources |
-| `research_status` | Poll research progress with built-in wait |
-| `research_import` | Import discovered sources into notebook |
-| `audio_overview_create` | Generate audio podcasts (requires confirmation) |
-| `video_overview_create` | Generate video overviews (requires confirmation) |
-| `infographic_create` | Generate infographics (requires confirmation) |
-| `slide_deck_create` | Generate slide decks (requires confirmation) |
-| `studio_status` | Check studio artifact generation status |
-| `studio_delete` | Delete studio artifacts (requires confirmation) |
-| `refresh_auth` | Reload auth tokens from disk or run headless re-auth |
-| `save_auth_tokens` | Save cookies for authentication |
-
-## Important Disclaimer
-
-This MCP uses **internal APIs** that:
-- Are undocumented and may change without notice
-- Require cookie extraction from your browser (I have a tool for that!)
+| `notebook_list` | 모든 노트북 목록 조회 |
+| `notebook_create` | 새 노트북 생성 |
+| `notebook_get` | 소스를 포함한 노트북 세부 정보 조회 |
+| `notebook_describe` | 노트북 콘텐츠에 대한 AI 요약 생성 |
+| `source_describe` | 소스에 대한 AI 요약 및 키워드 생성 |
+| `source_get_content` | 소스에서 원본 텍스트 추출 (AI 처리 없음) |
+| `notebook_rename` | 노트북 이름 변경 |
+| `chat_configure` | 채팅 목표/스타일 및 응답 길이 설정 |
+| `notebook_delete` | 노트북 삭제 (확인 필요) |
+| `notebook_add_url` | URL/유튜브를 소스로 추가 |
+| `notebook_add_text` | 붙여넣은 텍스트를 소스로 추가 |
+| `notebook_add_drive` | 구글 드라이브 문서를 소스로 추가 |
+| `notebook_query` | 질문하고 AI 답변 받기 |
+| `source_list_drive` | 최신 상태 여부와 함께 소스 목록 조회 |
+| `source_sync_drive` | 오래된 드라이브 소스 동기화 (확인 필요) |
+| `source_delete` | 노트북에서 소스 삭제 (확인 필요) |
+| `research_start` | 소스 발굴을 위한 웹 또는 드라이브 조사 시작 |
+| `research_status` | 조사 진행 상황 확인 |
+| `research_import` | 발굴된 소스를 노트북으로 가져오기 |
+| `audio_overview_create` | 오디오 팟캐스트 생성 (확인 필요) |
+| `video_overview_create` | 비디오 오버뷰 생성 (확인 필요) |
+| `infographic_create` | 인포그래픽 생성 (확인 필요) |
+| `slide_deck_create` | 슬라이드 덱 생성 (확인 필요) |
+| `studio_status` | 스튜디오 아티팩트 생성 상태 확인 |
+| `studio_delete` | 스튜디오 아티팩트 삭제 (확인 필요) |
+| `refresh_auth` | 디스크에서 인증 토큰 다시 로드 또는 헤드리스 재인증 실행 |
+| `save_auth_tokens` | 인증용 쿠키 저장 |
 
-Use at your own risk for personal/experimental purposes.
+## 중요 고지 사항
 
-## Installation
+이 MCP는 다음과 같은 **내부 API**를 사용합니다:
+- 문서화되지 않았으며 예고 없이 변경될 수 있습니다.
+- 브라우저에서 쿠키 추출이 필요합니다.
 
-Install from PyPI using your preferred Python package manager:
+개인적/실험적 목적으로만 사용해 주십시오.
 
-### Using uv (Recommended)
-```bash
-uv tool install notebooklm-mcp-server
-```
+## 설치 방법
 
-### Using pip
-```bash
-pip install notebooklm-mcp-server
-```
+선호하는 Python 패키지 관리자(uv, pip, pipx 등)를 사용하여 PyPI에서 `notebooklm-mcp-server`를 설치할 수 있습니다.
 
-### Using pipx
-```bash
-pipx install notebooklm-mcp-server
-```
+소스 코드에서 직접 설치하는 방법도 지원합니다.
 
-<details>
-<summary>Alternative: Install from Source</summary>
+## 업데이트 방법
 
-```bash
-# Clone the repository
-git clone https://github.com/jacob-bd/notebooklm-mcp.git
-cd notebooklm-mcp
+패키지 관리자의 업그레이드 명령어를 사용하여 최신 버전으로 업데이트하세요.
 
-# Install with uv
-uv tool install .
-```
-</details>
+업데이트 후에는 AI 도구를 재시작하여 연결을 갱신해야 합니다:
+- **Claude Code:** 애플리케이션을 재시작하거나 재연결 명령을 사용
+- **Cursor:** 애플리케이션 재시작
+- **Gemini CLI:** CLI 세션 재시작
 
-## Upgrading
-
-```bash
-# Using uv
-uv tool upgrade notebooklm-mcp-server
+## 제거 방법
 
-# Using pip
-pip install --upgrade notebooklm-mcp-server
+MCP를 완전히 제거하려면 패키지 관리자의 제거 명령어를 사용하세요. 선택적으로 캐시된 인증 토큰이나 AI 도구의 설정 파일에서도 제거할 수 있습니다.
 
-# Using pipx
-pipx upgrade notebooklm-mcp-server
-```
+## 인증
 
-After upgrading, restart your AI tool to reconnect to the updated MCP server:
+MCP를 사용하기 전에 NotebookLM 인증이 필요합니다.
 
-- **Claude Code:** Restart the application, or use `/mcp` to reconnect
-- **Cursor:** Restart the application
-- **Gemini CLI:** Restart the CLI session
+**자동 모드**를 권장합니다. 전용 Chrome 프로필을 실행하여 구글에 로그인하면 쿠키가 자동으로 추출됩니다. 로그인 정보는 추후 인증 갱신을 위해 저장됩니다.
 
-## Uninstalling
+만약 자동 모드가 작동하지 않는다면, **파일 모드**를 통해 Chrome 개발자 도구에서 수동으로 쿠키를 추출하여 저장할 수 있습니다.
 
-To completely remove the MCP:
+인증 성공 후에는 MCP를 AI 도구에 추가하고 재시작하세요.
 
-```bash
-# Using uv
-uv tool uninstall notebooklm-mcp-server
+자세한 내용과 문제 해결 방법은 **[docs/AUTHENTICATION.md](docs/AUTHENTICATION.md)**를 참고하세요.
 
-# Using pip
-pip uninstall notebooklm-mcp-server
+## MCP 설정
 
-# Using pipx
-pipx uninstall notebooklm-mcp-server
+> **⚠️ 문맥 창(Context Window) 주의:** 이 MCP는 **31개의 도구**를 제공하므로 문맥 창을 많이 차지할 수 있습니다. NotebookLM을 적극적으로 사용하지 않을 때는 MCP를 비활성화하여 다른 작업의 문맥을 확보하는 것이 좋습니다.
 
-# Remove cached auth tokens (optional)
-rm -rf ~/.notebooklm-mcp
-```
+### CLI 옵션
 
-Also remove from your AI tools:
+명령줄 인수를 사용하여 서버를 설정할 수 있습니다. 전송 프로토콜(stdio, http, sse), 포트, 호스트, 디버그 모드, 쿼리 타임아웃 등을 설정할 수 있습니다.
 
-| Tool | Command |
-|------|---------|
-| Claude Code | `claude mcp remove notebooklm-mcp` |
-| Gemini CLI | `gemini mcp remove notebooklm-mcp` |
-| Cursor/VS Code | Remove entry from `~/.cursor/mcp.json` or `~/.vscode/mcp.json` |
+### 환경 변수
 
-## Authentication
+환경 변수를 통해서도 설정이 가능합니다. (`NOTEBOOKLM_MCP_TRANSPORT`, `NOTEBOOKLM_MCP_PORT` 등)
 
-Before using the MCP, you need to authenticate with NotebookLM. Run:
+### HTTP 지원 (Open WebUI)
 
-```bash
-# Recommended: Auto mode (launches Chrome, you log in)
-notebooklm-mcp-auth
+원격 액세스나 다중 사용자 설정을 위해 HTTP 서버로 실행할 수 있습니다. 자세한 내용은 **[docs/MULTI_USER_ANALYSIS.md](docs/MULTI_USER_ANALYSIS.md)**를 참고하세요.
 
-# Alternative: File mode (manual cookie extraction)
-notebooklm-mcp-auth --file
-```
+### AI 도구 연결 (Claude Code, Gemini CLI, IDE 등)
 
-**Auto mode** launches a dedicated Chrome profile, you log in to Google, and cookies are extracted automatically. Your login persists for future auth refreshes.
+Claude Code나 Gemini CLI와 같은 도구는 내장된 명령어를 통해 MCP 서버를 쉽게 추가할 수 있습니다.
 
-**File mode** shows instructions for manually extracting cookies from Chrome DevTools and saving them to a file.
+Cursor, VS Code, Claude Desktop 등 JSON 설정 파일을 사용하는 도구의 경우, 설치된 `notebooklm-mcp`의 경로를 찾아 설정 파일의 `mcpServers` 항목에 추가해야 합니다.
 
-After successful auth, add the MCP to your AI tool and restart.
+## 활용 예시
 
-For detailed instructions, troubleshooting, and how the authentication system works, see **[docs/AUTHENTICATION.md](docs/AUTHENTICATION.md)**.
+Claude Code, Cursor, Gemini CLI 등의 AI 도구와 자연어로 대화하며 다음과 같이 활용할 수 있습니다.
 
-## MCP Configuration
+### 조사 및 탐색
 
-> **⚠️ Context Window Warning:** This MCP provides **31 tools** which consume a significant portion of your context window. It's recommended to **disable the MCP when not actively using NotebookLM** to preserve context for your other work. In Claude Code, use `@notebooklm-mcp` to toggle it on/off, or use `/mcp` command.
+- "내 모든 NotebookLM 노트북 목록을 보여줘"
+- "'AI 전략 연구'라는 새 노트북을 만들어줘"
+- "'기업 AI ROI 지표'에 대해 웹 조사를 시작하고 찾은 소스를 보여줘"
+- "'클라우드 마켓플레이스 트렌드'에 대해 심층 조사를 수행하고 상위 10개 소스를 가져와줘"
+- "내 구글 드라이브에서 '제품 로드맵' 관련 문서를 검색해서 노트북을 만들어줘"
 
-> **⚠️ Context Window Warning:** This MCP provides **31 tools** which consume a significant portion of your context window. It's recommended to **disable the MCP when not actively using NotebookLM** to preserve context for your other work. In Claude Code, use `@notebooklm-mcp` to toggle it on/off, or use `/mcp` command.
- 
-### CLI Options
+### 콘텐츠 추가
 
-You can configure the server using command-line arguments:
+- "이 URL을 내 노트북에 추가해줘: https://example.com/article"
+- "쿠버네티스에 관한 이 유튜브 영상을 노트북에 추가해줘"
+- "내 회의 노트를 텍스트 소스로 이 노트북에 추가해줘"
+- "이 구글 문서를 내 연구 노트북으로 가져와줘"
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `--transport`, `-t` | Transport protocol (`stdio`, `http`, `sse`) | `stdio` |
-| `--port`, `-p` | Port for HTTP/SSE transport | `8000` |
-| `--host`, `-H` | Host to bind for HTTP/SSE | `127.0.0.1` |
-| `--debug` | Enable verbose logging (API requests/responses) | `False` |
-| `--query-timeout` | Timeout for queries in seconds | `120.0` |
+### AI 기반 분석
 
-### Environment Variables
+- "이 노트북의 핵심 발견 사항은 뭐야?"
+- "이 모든 소스들의 주요 주장을 요약해줘"
+- "이 소스에서 보안 모범 사례에 대해 뭐라고 해?"
+- "이 노트북이 무엇에 관한 것인지 AI 요약을 해줘"
+- "채팅 설정을 학습 가이드 스타일로 변경하고 답변을 길게 해줘"
 
-Alternatively, use environment variables:
+### 콘텐츠 생성
 
-| Variable | Description |
-|----------|-------------|
-| `NOTEBOOKLM_MCP_TRANSPORT` | Transport type (`stdio`, `http`, `sse`) |
-| `NOTEBOOKLM_MCP_PORT` | Port to listen on |
-| `NOTEBOOKLM_MCP_HOST` | Host to bind |
-| `NOTEBOOKLM_MCP_DEBUG` | `true` to enable debug logging |
-| `NOTEBOOKLM_QUERY_TIMEOUT` | Query timeout in seconds |
+- "이 노트북을 심층 분석 형식의 오디오 팟캐스트 오버뷰로 만들어줘"
+- "클래식 비주얼 스타일로 비디오 설명 영상을 생성해줘"
+- "이 소스들을 바탕으로 브리핑 문서를 만들어줘"
+- "공부용 플래시카드를 만들어줘, 난이도는 중간으로"
+- "가로 방향 인포그래픽을 생성해줘"
+- "내 연구 소스들로 마인드맵을 그려줘"
+- "이 노트북으로 프레젠테이션 슬라이드 덱을 만들어줘"
 
-### HTTP Support (Open WebUI)
-Run as an HTTP server for remote access or multi-user setups:
-```bash
-notebooklm-mcp --transport http --port 8000
-```
-> See **[docs/MULTI_USER_ANALYSIS.md](docs/MULTI_USER_ANALYSIS.md)** for detailed multi-user deployment guides.
+### 스마트 관리
 
-### Claude Code (Recommended CLI Method)
+- "업데이트가 필요한 구글 드라이브 소스를 확인하고 동기화해줘"
+- "이 노트북의 모든 소스와 최신 상태 여부를 보여줘"
+- "노트북에서 이 소스를 삭제해줘"
+- "내 오디오 오버뷰 생성 상태를 확인해줘"
 
-Use the built-in CLI command to add the MCP server:
+## 인증 수명 주기
 
-**Add for all projects (recommended):**
-```bash
-claude mcp add --scope user notebooklm-mcp notebooklm-mcp
-```
+- **쿠키:** 약 2~4주 유지 (저장된 프로필이 있으면 헤드리스 Chrome을 통해 자동 갱신)
+- **CSRF 토큰:** 약 수분 유지 (요청 실패 시 자동 갱신)
+- **세션 ID:** MCP 세션당 유지 (MCP 시작 시 자동 추출)
 
-**Or add for current project only:**
-```bash
-claude mcp add notebooklm-mcp notebooklm-mcp
-```
+**v0.1.9+**: 서버가 토큰 만료를 자동으로 처리합니다.
+1. 만료 시 즉시 CSRF 토큰 갱신
+2. 외부에서 업데이트된 경우 디스크에서 쿠키 다시 로드
+3. 저장된 로그인 프로필이 있는 경우 헤드리스 Chrome 인증 실행
 
-That's it! Restart Claude Code to use the MCP tools.
+자동 갱신이 실패하면(구글 로그인이 완전히 만료된 경우), 다시 인증 도구를 실행해야 합니다.
 
-**Verify installation:**
-```bash
-claude mcp list
-```
+## 문제 해결
 
-<details>
-<summary>Alternative: Manual JSON Configuration</summary>
+### 업데이트가 제대로 되지 않는 경우
 
-If you prefer to edit the config file manually, add to `~/.claude.json`:
+패키지 관리자의 캐시 문제나 버전 제약으로 인해 최신 버전이 설치되지 않을 수 있습니다. 이 경우 강제 재설치 옵션을 사용하여 해결할 수 있습니다.
 
-```json
-{
-  "mcpServers": {
-    "notebooklm-mcp": {
-      "command": "notebooklm-mcp"
-    }
-  }
-}
-```
+### Chrome DevTools MCP가 작동하지 않는 경우 (Cursor/Gemini CLI)
 
-Restart Claude Code after editing.
-</details>
+Chrome DevTools MCP가 "도구가 없음"으로 표시되거나 시작되지 않는 경우, 알려진 `npx` 버그일 수 있습니다. 이 경우 `pnpm`을 사용하여 실행하도록 설정을 변경하면 해결될 수 있습니다.
 
-### Cursor, VS Code, Claude Desktop & Other IDEs
+## 제한 사항
 
-For tools that use JSON configuration files:
+- **속도 제한:** 무료 계층은 하루 약 50회 쿼리로 제한됩니다.
+- **공식 지원 없음:** API는 예고 없이 변경될 수 있습니다.
+- **쿠키 만료:** 몇 주마다 쿠키를 다시 추출해야 할 수 있습니다.
 
-| Tool | Config File Location |
-|------|---------------------|
-| Cursor | `~/.cursor/mcp.json` |
-| VS Code | `~/.vscode/mcp.json` |
-| Claude Desktop | `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) |
+## 기여하기
 
-**Step 1:** Find your installed path:
-```bash
-which notebooklm-mcp
-```
+API 문서 및 새로운 기능 추가 방법은 [CLAUDE.md](CLAUDE.md)를 참고하세요.
 
-This typically returns `/Users/<YOUR_USERNAME>/.local/bin/notebooklm-mcp` on macOS.
+## 바이브 코딩 알림
 
-**Step 2:** Add this configuration (replace the path with your result from Step 1):
-```json
-{
-  "mcpServers": {
-    "notebooklm-mcp": {
-      "command": "/Users/<YOUR_USERNAME>/.local/bin/notebooklm-mcp"
-    }
-  }
-}
-```
+완전한 투명성을 위해 말씀드립니다: 이 프로젝트는 전문 개발자가 아닌 사람이 AI 코딩 어시스턴트를 활용하여 만들었습니다. 숙련된 Python 개발자가 이 코드를 본다면 다소 부족해 보일 수 있습니다.
 
-Restart the application after adding the configuration.
+이 프로젝트의 목표는 NotebookLM에 프로그래밍 방식으로 액세스하고자 하는 필요를 해결하고, 그 과정에서 배우는 것이었습니다. 코드는 작동하지만, 수년간의 경험에서 나오는 패턴이나 최적화, 우아함이 부족할 수 있습니다.
 
-### Other MCP-Compatible Tools
+**여러분의 도움이 필요합니다.** 코드를 보시고 개선할 점이 있다면 주저하지 말고 기여해 주세요. 인간의 전문성은 대체 불가능하기 때문에 오픈 소스로 공개했습니다. 리팩토링, 더 나은 에러 처리, 타입 힌트, 아키텍처 조언 등 어떤 형태의 PR이나 이슈 제기도 환영합니다.
 
-**CLI tools with built-in MCP commands** (AIDER, Codex, OpenCode, etc.):
-```bash
-<your-tool> mcp add notebooklm-mcp notebooklm-mcp
-```
+AI의 도움을 받는 개발자를 코드 리뷰를 통해 멘토링한다고 생각해 주시면 감사하겠습니다. 경험 많은 개발자가 지식을 공유할 때 우리 모두가 성장할 수 있습니다.
 
-**Tools using JSON config files** — use the full path approach shown above.
+## 크레딧
 
-### Gemini CLI (Recommended CLI Method)
+특별히 감사드리는 분들:
+- **Le Anh Tuan** ([@latuannetnam](https://github.com/latuannetnam)): HTTP 전송, 디버그 로깅 시스템, 성능 최적화 기여
+- **David Szabo-Pele** ([@davidszp](https://github.com/davidszp)): `source_get_content` 도구 및 리눅스 인증 수정
 
-Use the built-in CLI command to add the MCP server:
-
-**Add for all projects (recommended):**
-```bash
-gemini mcp add --scope user notebooklm-mcp notebooklm-mcp
-```
-
-**Or add for current project only:**
-```bash
-gemini mcp add notebooklm-mcp notebooklm-mcp
-```
-
-That's it! Restart Gemini CLI to use the MCP tools.
-
-**Verify installation:**
-```bash
-gemini mcp list
-```
-
-<details>
-<summary>Alternative: Manual JSON Configuration</summary>
-
-Add to `~/.gemini/settings.json` under `mcpServers` (run `which notebooklm-mcp` to find your path):
-```json
-"notebooklm-mcp": {
-  "command": "/Users/<YOUR_USERNAME>/.local/bin/notebooklm-mcp"
-}
-```
-
-Restart Gemini CLI after editing.
-</details>
-
-### Managing Context Window Usage
-
-Since this MCP has 31 tools, it's good practice to disable it when not in use:
-
-**Claude Code:**
-```bash
-# Toggle on/off by @-mentioning in chat
-@notebooklm-mcp
-
-# Or use the /mcp command to enable/disable
-/mcp
-```
-
-**Cursor/Gemini CLI:**
-- Comment out the server in your config file when not needed
-- Or use your tool's MCP management features if available
-
-## What You Can Do
-
-Simply chat with your AI tool (Claude Code, Cursor, Gemini CLI) using natural language. Here are some examples:
-
-### Research & Discovery
-
-- "List all my NotebookLM notebooks"
-- "Create a new notebook called 'AI Strategy Research'"
-- "Start web research on 'enterprise AI ROI metrics' and show me what sources it finds"
-- "Do a deep research on 'cloud marketplace trends' and import the top 10 sources"
-- "Search my Google Drive for documents about 'product roadmap' and create a notebook"
-
-### Adding Content
-
-- "Add this URL to my notebook: https://example.com/article"
-- "Add this YouTube video about Kubernetes to the notebook"
-- "Add my meeting notes as a text source to this notebook"
-- "Import this Google Doc into my research notebook"
-
-### AI-Powered Analysis
-
-- "What are the key findings in this notebook?"
-- "Summarize the main arguments across all these sources"
-- "What does this source say about security best practices?"
-- "Get an AI summary of what this notebook is about"
-- "Configure the chat to use a learning guide style with longer responses"
-
-### Content Generation
-
-- "Create an audio podcast overview of this notebook in deep dive format"
-- "Generate a video explainer with classic visual style"
-- "Make a briefing doc from these sources"
-- "Create flashcards for studying, medium difficulty"
-- "Generate an infographic in landscape orientation"
-- "Build a mind map from my research sources"
-- "Create a slide deck presentation from this notebook"
-
-### Smart Management
-
-- "Check which Google Drive sources are out of date and sync them"
-- "Show me all the sources in this notebook with their freshness status"
-- "Delete this source from the notebook"
-- "Check the status of my audio overview generation"
-
-**Pro tip:** After creating studio content (audio, video, reports, etc.), poll the status to get download URLs when generation completes.
-
-## Authentication Lifecycle
-
-| Component | Duration | Refresh |
-|-----------|----------|---------|
-| Cookies | ~2-4 weeks | Auto-refresh via headless Chrome (if profile saved) |
-| CSRF Token | ~minutes | Auto-refreshed on every request failure |
-| Session ID | Per MCP session | Auto-extracted on MCP start |
-
-**v0.1.9+**: The server now automatically handles token expiration:
-1. Refreshes CSRF tokens immediately when expired
-2. Reloads cookies from disk if updated externally
-3. Runs headless Chrome auth if profile has saved login
-
-You can also call `refresh_auth()` to explicitly reload tokens.
-
-If automatic refresh fails (Google login fully expired), run `notebooklm-mcp-auth` again.
-
-## Troubleshooting
-
-### `uv tool upgrade` Not Installing Latest Version
-
-**Symptoms:**
-- Running `uv tool upgrade notebooklm-mcp-server` installs an older version (e.g., 0.1.5 instead of 0.1.9)
-- `uv cache clean` doesn't fix the issue
-
-**Why this happens:** `uv tool upgrade` respects version constraints from your original installation. If you initially installed an older version or with a constraint, `upgrade` stays within those bounds by design.
-
-**Fix — Force reinstall:**
-```bash
-uv tool install --force notebooklm-mcp-server
-```
-
-This bypasses any cached constraints and installs the absolute latest version from PyPI.
-
-**Verify:**
-```bash
-uv tool list | grep notebooklm
-# Should show: notebooklm-mcp-server v0.1.9 (or latest)
-```
-
----
-
-### Chrome DevTools MCP Not Working (Cursor/Gemini CLI)
-
-If Chrome DevTools MCP shows "no tools, prompts or resources" or fails to start, it's likely due to a known `npx` bug with the puppeteer-core module.
-
-**Symptoms:**
-- Cursor/Gemini CLI shows MCP as connected but with "No tools, prompts, or resources"
-- Process spawn errors in logs: `spawn pnpx ENOENT` or module not found errors
-- Can't extract cookies for NotebookLM authentication
-
-**Fix:**
-
-1. **Install pnpm** (if not already installed):
-   ```bash
-   npm install -g pnpm
-   ```
-
-2. **Update Chrome DevTools MCP configuration:**
-
-   **For Cursor** (`~/.cursor/mcp.json`):
-   ```json
-   "chrome-devtools": {
-     "command": "pnpm",
-     "args": ["dlx", "chrome-devtools-mcp@latest", "--browser-url=http://127.0.0.1:9222"]
-   }
-   ```
-
-   **For Gemini CLI** (`~/.gemini/settings.json`):
-   ```json
-   "chrome-devtools": {
-     "command": "pnpm",
-     "args": ["dlx", "chrome-devtools-mcp@latest"]
-   }
-   ```
-
-3. **Restart your IDE/CLI** for changes to take effect.
-
-**Why this happens:** Chrome DevTools MCP uses `puppeteer-core` which changed its module path in v23+, but `npx` caching behavior causes module resolution failures. Using `pnpm dlx` avoids this issue.
-
-**Related Issues:**
-- [ChromeDevTools/chrome-devtools-mcp#160](https://github.com/ChromeDevTools/chrome-devtools-mcp/issues/160)
-- [ChromeDevTools/chrome-devtools-mcp#111](https://github.com/ChromeDevTools/chrome-devtools-mcp/issues/111)
-- [ChromeDevTools/chrome-devtools-mcp#221](https://github.com/ChromeDevTools/chrome-devtools-mcp/issues/221)
-
-## Limitations
-
-- **Rate limits**: Free tier has ~50 queries/day
-- **No official support**: API may change without notice
-- **Cookie expiration**: Need to re-extract cookies every few weeks
-
-## Contributing
-
-See [CLAUDE.md](CLAUDE.md) for detailed API documentation and how to add new features.
-
-## Vibe Coding Alert
-
-Full transparency: this project was built by a non-developer using AI coding assistants. If you're an experienced Python developer, you might look at this codebase and wince. That's okay.
-
-The goal here was to scratch an itch - programmatic access to NotebookLM - and learn along the way. The code works, but it's likely missing patterns, optimizations, or elegance that only years of experience can provide.
-
-**This is where you come in.** If you see something that makes you cringe, please consider contributing rather than just closing the tab. This is open source specifically because human expertise is irreplaceable. Whether it's refactoring, better error handling, type hints, or architectural guidance - PRs and issues are welcome.
-
-Think of it as a chance to mentor an AI-assisted developer through code review. We all benefit when experienced developers share their knowledge.
-
-## Credits
-
-Special thanks to:
-- **Le Anh Tuan** ([@latuannetnam](https://github.com/latuannetnam)) for contributing the HTTP transport, debug logging system, and performance optimizations.
-- **David Szabo-Pele** ([@davidszp](https://github.com/davidszp)) for the `source_get_content` tool and Linux auth fixes.
-
-
-## License
+## 라이선스
 
 MIT License
