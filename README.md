@@ -2,8 +2,6 @@
 
 <img src="docs/media/jay_profile.jpg" width="300" alt="Jay Profile" />
 
-![NotebookLM MCP Header](docs/media/header.jpeg)
-
 **[유튜브 채널 바로가기](https://www.youtube.com/@CONNECT-AI-LAB)** | **[공식 홈페이지](https://www.aicitybuilders.com/)**
 
 ### 🚀 AI 1인 기업가를 위한 자동화 툴
@@ -15,13 +13,6 @@
 > 📧 **문의:** jay@connexionai.kr
 
 > **참고:** Pro 및 무료 계정에서 테스트되었습니다. Enterprise 계정에서도 작동할 수 있지만 테스트되지는 않았습니다.
-
-📺 **데모 영상 보기**
-
-| 일반 개요 | Claude Desktop | Perplexity Desktop | MCP 슈퍼 어시스턴트 |
-|:---:|:---:|:---:|:---:|
-| [![General](https://img.youtube.com/vi/d-PZDQlO4m4/mqdefault.jpg)](https://www.youtube.com/watch?v=d-PZDQlO4m4) | [![Claude](https://img.youtube.com/vi/PU8JhgLPxes/mqdefault.jpg)](https://www.youtube.com/watch?v=PU8JhgLPxes) | [![Perplexity](https://img.youtube.com/vi/BCKlDNg-qxs/mqdefault.jpg)](https://www.youtube.com/watch?v=BCKlDNg-qxs) | [![MCP SuperAssistant](https://img.youtube.com/vi/7aHDbkr-l_E/mqdefault.jpg)](https://www.youtube.com/watch?v=7aHDbkr-l_E) |
-
 
 ## 주요 기능
 
