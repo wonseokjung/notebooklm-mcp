@@ -429,7 +429,7 @@ def run_auth_flow(port: int = CDP_DEFAULT_PORT, auto_launch: bool = True) -> Aut
         port: Chrome DevTools port
         auto_launch: If True, automatically launch Chrome if not running
     """
-    print("NotebookLM MCP Authentication")
+    print("NotebookLM MCP 인증")
     print("=" * 40)
     print()
 
@@ -442,18 +442,18 @@ def run_auth_flow(port: int = CDP_DEFAULT_PORT, auto_launch: bool = True) -> Aut
     if not debugger_url and auto_launch:
         # Check if our specific profile is already in use
         if is_our_chrome_profile_in_use():
-            print("The NotebookLM auth profile is already in use.")
+            print("NotebookLM 인증 프로필을 이미 사용 중입니다.")
             print()
-            print("This means a previous auth Chrome window is still open.")
-            print("Close that window and try again, or use file mode:")
+            print("이전 인증 Chrome 창이 아직 열려 있다는 뜻입니다.")
+            print("해당 창을 닫고 다시 시도하거나, 파일 모드를 사용하세요:")
             print()
             print("  notebooklm-mcp-auth --file")
             print()
             return None
 
         # We can launch our separate Chrome profile even if user's main Chrome is open
-        print("Launching Chrome with NotebookLM auth profile...")
-        print("(First time: you'll need to log in to your Google account)")
+        print("NotebookLM 인증 프로필로 Chrome을 실행 중입니다...")
+        print("(처음인 경우: Google 계정에 로그인해야 합니다)")
         print()
         # Launch with visible window so user can log in
         chrome_process = launch_chrome(port, headless=False)
@@ -461,53 +461,53 @@ def run_auth_flow(port: int = CDP_DEFAULT_PORT, auto_launch: bool = True) -> Aut
         debugger_url = get_chrome_debugger_url(port)
 
     if not debugger_url:
-        print(f"ERROR: Cannot connect to Chrome on port {port}")
+        print(f"오류: Chrome 포트 {port}에 연결할 수 없습니다")
         print()
-        print("This can happen if:")
-        print("  - Chrome failed to start")
-        print("  - Another process is using port 9222")
-        print("  - Firewall is blocking the port")
+        print("다음과 같은 경우 발생할 수 있습니다:")
+        print("  - Chrome을 시작하지 못했습니다")
+        print("  - 다른 프로세스가 9222 포트를 사용 중입니다")
+        print("  - 방화벽이 포트를 차단하고 있습니다")
         print()
-        print("TRY: Use file mode instead (most reliable):")
+        print("시도: 대신 파일 모드를 사용하세요 (가장 안정적):")
         print("     notebooklm-mcp-auth --file")
         print()
         return None
 
-    print(f"Connected to Chrome debugger")
+    print(f"Chrome 디버거에 연결되었습니다")
 
     # Find or create NotebookLM page
     page = find_or_create_notebooklm_page(port)
     if not page:
-        print("ERROR: Failed to find or create NotebookLM page")
+        print("오류: NotebookLM 페이지를 찾거나 생성하는 데 실패했습니다")
         return None
 
     ws_url = page.get("webSocketDebuggerUrl")
     if not ws_url:
-        print("ERROR: No WebSocket URL for page")
+        print("오류: 페이지의 WebSocket URL이 없습니다")
         return None
 
-    print(f"Using page: {page.get('title', 'Unknown')}")
+    print(f"사용 중인 페이지: {page.get('title', 'Unknown')}")
 
     # Navigate to NotebookLM if needed
     current_url = page.get("url", "")
     if "notebooklm.google.com" not in current_url:
-        print("Navigating to NotebookLM...")
+        print("NotebookLM으로 이동 중...")
         navigate_to_url(ws_url, NOTEBOOKLM_URL)
 
     # Check login status by URL (cheap - no HTML parsing)
-    print("Checking login status...")
+    print("로그인 상태 확인 중...")
     current_url = get_current_url(ws_url)
 
     if not check_if_logged_in_by_url(current_url):
         print()
         print("=" * 40)
-        print("NOT LOGGED IN")
+        print("로그인되지 않음")
         print("=" * 40)
         print()
-        print("Please log in to NotebookLM in the Chrome window.")
-        print("This tool will wait for you to complete login...")
+        print("Chrome 창에서 NotebookLM에 로그인해 주세요.")
+        print("로그인이 완료될 때까지 기다립니다...")
         print()
-        print("(Press Ctrl+C to cancel)")
+        print("(취소하려면 Ctrl+C를 누르세요)")
         print()
 
         # Wait for login - check URL every 5 seconds (cheap operation)
@@ -518,22 +518,22 @@ def run_auth_flow(port: int = CDP_DEFAULT_PORT, auto_launch: bool = True) -> Aut
             try:
                 current_url = get_current_url(ws_url)
                 if check_if_logged_in_by_url(current_url):
-                    print("Login detected!")
+                    print("로그인이 감지되었습니다!")
                     break
             except Exception as e:
-                print(f"Waiting... ({e})")
+                print(f"대기 중... ({e})")
 
         if not check_if_logged_in_by_url(current_url):
-            print("ERROR: Login timeout. Please try again.")
+            print("오류: 로그인 시간 초과. 다시 시도해 주세요.")
             return None
 
     # Extract cookies
-    print("Extracting cookies...")
+    print("쿠키 추출 중...")
     cookies_list = get_page_cookies(ws_url)
     cookies = {c["name"]: c["value"] for c in cookies_list}
 
     if not validate_cookies(cookies):
-        print("ERROR: Missing required cookies. Please ensure you're fully logged in.")
+        print("오류: 필수 쿠키가 누락되었습니다. 완전히 로그인되었는지 확인해 주세요.")
         print(f"Required: {REQUIRED_COOKIES}")
         print(f"Found: {list(cookies.keys())}")
         return None
@@ -542,11 +542,11 @@ def run_auth_flow(port: int = CDP_DEFAULT_PORT, auto_launch: bool = True) -> Aut
     html = get_page_html(ws_url)
 
     # Extract CSRF token
-    print("Extracting CSRF token...")
+    print("CSRF 토큰 추출 중...")
     csrf_token = extract_csrf_from_page_source(html)
     if not csrf_token:
-        print("WARNING: Could not extract CSRF token from page.")
-        print("You may need to extract it manually from Network tab.")
+        print("경고: 페이지에서 CSRF 토큰을 추출할 수 없습니다.")
+        print("네트워크 탭에서 수동으로 추출해야 할 수도 있습니다.")
         csrf_token = ""
 
     # Extract session ID
@@ -565,18 +565,18 @@ def run_auth_flow(port: int = CDP_DEFAULT_PORT, auto_launch: bool = True) -> Aut
 
     print()
     print("=" * 40)
-    print("SUCCESS!")
+    print("성공!")
     print("=" * 40)
     print()
-    print(f"Cookies: {len(cookies)} extracted")
-    print(f"CSRF Token: {'Yes' if csrf_token else 'No (will be auto-extracted)'}")
-    print(f"Session ID: {session_id or 'Will be auto-extracted'}")
+    print(f"쿠키: {len(cookies)}개 추출됨")
+    print(f"CSRF 토큰: {'있음' if csrf_token else '없음 (자동 추출될 예정)'}")
+    print(f"세션 ID: {session_id or '자동 추출될 예정'}")
     print()
-    print(f"Tokens cached to: {get_cache_path()}")
+    print(f"토큰 저장 위치: {get_cache_path()}")
     print()
-    print("NEXT STEPS:")
+    print("다음 단계:")
     print()
-    print("  1. Add the MCP to your AI tool (if not already done):")
+    print("  1. AI 도구에 MCP 추가 (아직 하지 않은 경우):")
     print()
     print("     Claude Code:")
     print("       claude mcp add notebooklm-mcp -- notebooklm-mcp")
@@ -584,17 +584,17 @@ def run_auth_flow(port: int = CDP_DEFAULT_PORT, auto_launch: bool = True) -> Aut
     print("     Gemini CLI:")
     print("       gemini mcp add notebooklm notebooklm-mcp")
     print()
-    print("     Or add to settings.json manually:")
+    print("     또는 settings.json에 수동으로 추가:")
     print('       "notebooklm-mcp": { "command": "notebooklm-mcp" }')
     print()
-    print("  2. Restart your AI assistant")
+    print("  2. AI 어시스턴트 재시작")
     print()
-    print("  3. Test by asking: 'List my NotebookLM notebooks'")
+    print("  3. 테스트 질문: '내 NotebookLM 노트북 목록 보여줘'")
     print()
 
     # Close Chrome if we launched it - this unlocks the profile for headless auth
     if chrome_process:
-        print("Closing Chrome (profile saved for future headless auth)...")
+        print("Chrome 닫는 중 (향후 헤드리스 인증을 위해 프로필 저장됨)...")
         try:
             chrome_process.terminate()
             chrome_process.wait(timeout=5)
@@ -618,58 +618,58 @@ def run_file_cookie_entry(cookie_file: str | None = None) -> AuthTokens | None:
         cookie_file: Optional path to file. If not provided, shows instructions
                      and prompts for the path.
     """
-    print("NotebookLM MCP - Cookie File Import")
+    print("NotebookLM MCP - 쿠키 파일 가져오기")
     print("=" * 50)
     print()
 
     # If no file provided, show instructions and prompt for path
     if not cookie_file:
-        print("Follow these steps to extract and save your cookies:")
+        print("쿠키를 추출하고 저장하려면 다음 단계를 따르세요:")
         print()
-        print("  1. Open Chrome and go to: https://notebooklm.google.com")
-        print("  2. Make sure you're logged in")
-        print("  3. Press F12 (or Cmd+Option+I on Mac) to open DevTools")
-        print("  4. Click the 'Network' tab")
-        print("  5. In the filter box, type: batchexecute")
-        print("  6. Click on any notebook to trigger a request")
-        print("  7. Click on a 'batchexecute' request in the list")
-        print("  8. In the right panel, find 'Request Headers'")
-        print("  9. Find the line starting with 'cookie:'")
-        print(" 10. Right-click the cookie VALUE and select 'Copy value'")
-        print(" 11. Edit the 'cookies.txt' file in this repo (or create a new file)")
-        print(" 12. Paste the cookie string and save")
+        print("  1. Chrome을 열고 이동: https://notebooklm.google.com")
+        print("  2. 로그인이 되어 있는지 확인하세요.")
+        print("  3. F12 (Mac은 Cmd+Option+I)를 눌러 개발자 도구를 엽니다.")
+        print("  4. '네트워크(Network)' 탭을 클릭합니다.")
+        print("  5. 필터 상자에 다음을 입력하세요: batchexecute")
+        print("  6. 아무 노트북이나 클릭하여 요청을 발생시킵니다.")
+        print("  7. 목록에서 'batchexecute' 요청을 클릭합니다.")
+        print("  8. 오른쪽 패널에서 'Request Headers'를 찾습니다.")
+        print("  9. 'cookie:'로 시작하는 줄을 찾습니다.")
+        print(" 10. 쿠키 '값(Value)'을 우클릭하고 '값 복사(Copy value)'를 선택합니다.")
+        print(" 11. 이 저장소의 'cookies.txt' 파일을 수정합니다 (또는 새 파일 생성).")
+        print(" 12. 쿠키 문자열을 붙여넣고 저장합니다.")
         print()
-        print("TIP: If running from the repo directory, just edit 'cookies.txt'")
-        print("     and enter: cookies.txt")
+        print("팁: 리포지토리 디렉터리에서 실행하는 경우 'cookies.txt'만 수정하고")
+        print("     다음을 입력하세요: cookies.txt")
         print()
         print("-" * 50)
         print()
 
         try:
-            cookie_file = input("Enter the path to your cookie file: ").strip()
+            cookie_file = input("쿠키 파일 경로를 입력하세요: ").strip()
         except (EOFError, KeyboardInterrupt):
-            print("\nCancelled.")
+            print("\n취소됨.")
             return None
 
         if not cookie_file:
-            print("ERROR: No file path provided.")
+            print("오류: 파일 경로가 제공되지 않았습니다.")
             return None
 
         # Expand ~ to home directory
         cookie_file = str(Path(cookie_file).expanduser())
 
     print()
-    print(f"Reading cookies from: {cookie_file}")
+    print(f"쿠키 읽는 중: {cookie_file}")
     print()
 
     try:
         with open(cookie_file, "r") as f:
             cookie_string = f.read().strip()
     except FileNotFoundError:
-        print(f"ERROR: File not found: {cookie_file}")
+        print(f"오류: 파일을 찾을 수 없음: {cookie_file}")
         return None
     except Exception as e:
-        print(f"ERROR: Could not read file: {e}")
+        print(f"오류: 파일을 읽을 수 없음: {e}")
         return None
 
     # Strip comment lines (lines starting with #)
@@ -678,12 +678,12 @@ def run_file_cookie_entry(cookie_file: str | None = None) -> AuthTokens | None:
     cookie_string = " ".join(cookie_lines)
 
     if not cookie_string:
-        print("\nERROR: No cookie string found in file.")
-        print("Make sure you pasted your cookies and removed the instructions.")
+        print("\n오류: 파일에서 쿠키 문자열을 찾을 수 없습니다.")
+        print("쿠키를 붙여넣고 지침을 제거했는지 확인하세요.")
         return None
 
     print()
-    print("Validating cookies...")
+    print("쿠키 검증 중...")
 
     # Parse cookies from header format (key=value; key=value; ...)
     cookies = {}
@@ -694,19 +694,19 @@ def run_file_cookie_entry(cookie_file: str | None = None) -> AuthTokens | None:
             cookies[key.strip()] = value.strip()
 
     if not cookies:
-        print("\nERROR: Could not parse any cookies from input.")
-        print("Make sure you copied the cookie VALUE, not the header name.")
+        print("\n오류: 입력에서 쿠키를 파싱할 수 없습니다.")
+        print("헤더 이름이 아닌 쿠키 '값(Value)'을 복사했는지 확인하세요.")
         print()
-        print("Expected format: SID=xxx; HSID=xxx; SSID=xxx; ...")
+        print("예상 형식: SID=xxx; HSID=xxx; SSID=xxx; ...")
         return None
 
     # Validate required cookies
     if not validate_cookies(cookies):
-        print("\nWARNING: Some required cookies are missing!")
-        print(f"Required: {REQUIRED_COOKIES}")
-        print(f"Found: {list(cookies.keys())}")
+        print("\n경고: 일부 필수 쿠키가 누락되었습니다!")
+        print(f"필수: {REQUIRED_COOKIES}")
+        print(f"발견: {list(cookies.keys())}")
         print()
-        print("Continuing anyway...")
+        print("계속 진행합니다...")
 
     # Create tokens object (CSRF and session ID will be auto-extracted later)
     tokens = AuthTokens(
@@ -718,20 +718,20 @@ def run_file_cookie_entry(cookie_file: str | None = None) -> AuthTokens | None:
 
     # Save to cache
     print()
-    print("Saving cookies...")
+    print("쿠키 저장 중...")
     save_tokens_to_cache(tokens)
 
     print()
     print("=" * 50)
-    print("SUCCESS!")
+    print("성공!")
     print("=" * 50)
     print()
-    print(f"Cookies saved: {len(cookies)} cookies")
-    print(f"Cache location: {get_cache_path()}")
+    print(f"저장된 쿠키: {len(cookies)}개")
+    print(f"캐시 위치: {get_cache_path()}")
     print()
-    print("NEXT STEPS:")
+    print("다음 단계:")
     print()
-    print("  1. Add the MCP to your AI tool (if not already done):")
+    print("  1. AI 도구에 MCP 추가 (아직 하지 않은 경우):")
     print()
     print("     Claude Code:")
     print("       claude mcp add notebooklm-mcp -- notebooklm-mcp")
@@ -739,12 +739,12 @@ def run_file_cookie_entry(cookie_file: str | None = None) -> AuthTokens | None:
     print("     Gemini CLI:")
     print("       gemini mcp add notebooklm notebooklm-mcp")
     print()
-    print("     Or add to settings.json manually:")
+    print("     또는 settings.json에 수동으로 추가:")
     print('       "notebooklm-mcp": { "command": "notebooklm-mcp" }')
     print()
-    print("  2. Restart your AI assistant")
+    print("  2. AI 어시스턴트 재시작")
     print()
-    print("  3. Test by asking: 'List my NotebookLM notebooks'")
+    print("  3. 테스트 질문: '내 NotebookLM 노트북 목록 보여줘'")
     print()
 
     return tokens
@@ -755,28 +755,28 @@ def main():
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="Authenticate with NotebookLM MCP",
+        description="NotebookLM MCP 인증 도구",
         epilog="""
-This tool extracts authentication tokens from Chrome for use with the NotebookLM MCP.
+이 도구는 NotebookLM MCP에서 사용할 인증 토큰을 Chrome에서 추출합니다.
 
-TWO MODES:
+두 가지 모드:
 
-1. FILE MODE (--file): Import cookies from a file (RECOMMENDED)
-   - Shows step-by-step instructions for extracting cookies
-   - Prompts you for the file path after you save the cookies
-   - No Chrome remote debugging required
+1. 파일 모드 (--file): 파일에서 쿠키 가져오기 (권장)
+   - 쿠키 추출을 위한 단계별 지침을 보여줍니다.
+   - 쿠키를 저장한 후 파일 경로를 입력받습니다.
+   - Chrome 원격 디버깅이 필요하지 않습니다.
 
-2. AUTO MODE (default): Automatic extraction via Chrome DevTools
-   - Requires closing Chrome first
-   - Launches Chrome and extracts cookies automatically
-   - May not work on all systems
+2. 자동 모드 (기본값): Chrome DevTools를 통한 자동 추출
+   - 먼저 Chrome을 닫아야 합니다.
+   - Chrome을 실행하고 자동으로 쿠키를 추출합니다.
+   - 일부 시스템에서는 작동하지 않을 수 있습니다.
 
-EXAMPLES:
-  notebooklm-mcp-auth --file               # Guided file import (recommended)
-  notebooklm-mcp-auth --file ~/cookies.txt # Direct file import
-  notebooklm-mcp-auth                      # Auto mode (close Chrome first)
+사용 예시:
+  notebooklm-mcp-auth --file               # 안내가 포함된 파일 가져오기 (권장)
+  notebooklm-mcp-auth --file ~/cookies.txt # 직접 파일 가져오기
+  notebooklm-mcp-auth                      # 자동 모드 (Chrome 먼저 종료)
 
-After authentication, start the MCP server with: notebooklm-mcp
+인증 후 다음 명령어로 MCP 서버를 시작하세요: notebooklm-mcp
         """
     )
     parser.add_argument(
@@ -784,23 +784,23 @@ After authentication, start the MCP server with: notebooklm-mcp
         nargs="?",
         const="",  # When --file is used without argument, set to empty string
         metavar="PATH",
-        help="Import cookies from file (recommended). Shows instructions if no path given."
+        help="파일에서 쿠키 가져오기 (권장). 경로가 없으면 지침을 표시합니다."
     )
     parser.add_argument(
         "--port",
         type=int,
         default=CDP_DEFAULT_PORT,
-        help=f"Chrome DevTools port (default: {CDP_DEFAULT_PORT})"
+        help=f"Chrome DevTools 포트 (기본값: {CDP_DEFAULT_PORT})"
     )
     parser.add_argument(
         "--show-tokens",
         action="store_true",
-        help="Show cached tokens (for debugging)"
+        help="캐시된 토큰 표시 (디버깅용)"
     )
     parser.add_argument(
         "--no-auto-launch",
         action="store_true",
-        help="Don't automatically launch Chrome (requires Chrome to be running with debugging)"
+        help="Chrome 자동 실행 안 함 (디버깅이 켜진 상태로 Chrome이 실행 중이어야 함)"
     )
 
     args = parser.parse_args()
@@ -812,7 +812,7 @@ After authentication, start the MCP server with: notebooklm-mcp
                 data = json.load(f)
             print(json.dumps(data, indent=2))
         else:
-            print("No cached tokens found.")
+            print("캐시된 토큰이 없습니다.")
         return 0
 
     try:
@@ -825,7 +825,7 @@ After authentication, start the MCP server with: notebooklm-mcp
 
         return 0 if tokens else 1
     except KeyboardInterrupt:
-        print("\nCancelled.")
+        print("\n취소됨.")
         return 1
     except Exception as e:
         print(f"ERROR: {e}")

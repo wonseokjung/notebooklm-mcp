@@ -21,11 +21,11 @@ mcp_logger = logging.getLogger("notebooklm_mcp.mcp")
 # Initialize MCP server
 mcp = FastMCP(
     name="notebooklm",
-    instructions="""NotebookLM MCP - Access NotebookLM (notebooklm.google.com).
+    instructions="""NotebookLM MCP - NotebookLM (notebooklm.google.com) 접근 도구.
 
-**Auth:** If you get authentication errors, run `notebooklm-mcp-auth` via your Bash/terminal tool. This is the automated authentication method that handles everything. Only use save_auth_tokens as a fallback if the CLI fails.
-**Confirmation:** Tools with confirm param require user approval before setting confirm=True.
-**Studio:** After creating audio/video/infographic/slides, poll studio_status for completion.""",
+**인증:** 인증 오류가 발생하면 터미널에서 `notebooklm-mcp-auth`를 실행하세요. 이것은 모든 것을 처리하는 자동 인증 방법입니다. CLI가 실패하는 경우에만 save_auth_tokens를 대체 수단으로 사용하세요.
+**확인 (Confirm):** confirm 매개변수가 있는 도구는 confirm=True로 설정하기 전에 사용자 승인이 필요합니다.
+**스튜디오:** 오디오/비디오/인포그래픽/슬라이드 생성 후, 완료 여부를 확인하려면 studio_status를 폴링하세요.""",
 )
 
 # Health check endpoint for load balancers and monitoring
@@ -96,9 +96,9 @@ def get_client() -> NotebookLMClient:
                 session_id = session_id or cached.session_id
             else:
                 raise ValueError(
-                    "No authentication found. Either:\n"
-                    "1. Run 'notebooklm-mcp-auth' to authenticate via Chrome, or\n"
-                    "2. Set NOTEBOOKLM_COOKIES environment variable manually"
+                    "인증 정보를 찾을 수 없습니다. 다음 중 하나를 수행하세요:\n"
+                    "1. 'notebooklm-mcp-auth'를 실행하여 Chrome을 통해 인증\n"
+                    "2. NOTEBOOKLM_COOKIES 환경 변수를 수동으로 설정"
                 )
 
         _client = NotebookLMClient(
