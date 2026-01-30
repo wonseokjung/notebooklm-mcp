@@ -97,9 +97,6 @@ MCP를 사용하기 전에 NotebookLM 인증이 필요합니다.
 
 환경 변수를 통해서도 설정이 가능합니다. (`NOTEBOOKLM_MCP_TRANSPORT`, `NOTEBOOKLM_MCP_PORT` 등)
 
-### HTTP 지원 (Open WebUI)
-
-원격 액세스나 다중 사용자 설정을 위해 HTTP 서버로 실행할 수 있습니다. 자세한 내용은 **[docs/MULTI_USER_ANALYSIS.md](docs/MULTI_USER_ANALYSIS.md)**를 참고하세요.
 
 ### AI 도구 연결 (Claude Code, Gemini CLI, IDE 등)
 
